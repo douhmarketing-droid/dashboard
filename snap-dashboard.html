@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>لوحة دوح للإعلانات</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --primary: #fffc00;
+      --primary-dark: #facc15;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --google-blue: #1d4ed8;
+      --success: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    .layout {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #020617;
+      color: #f9fafb;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: radial-gradient(circle at 30% 20%, #34d399, #22c55e, #14b8a6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .brand-text-main {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    .nav-text-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      margin-right: 32px;
+      font-size: 14px;
+    }
+
+    .nav-link {
+      cursor: pointer;
+      color: #e5e7eb;
+    }
+
+    .nav-link.active {
+      color: #ffffff;
+      font-weight: 600;
+      border-bottom: 2px solid #22c55e;
+      padding-bottom: 4px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .nav-icon-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .profile-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Main */
+    .main {
+      flex: 1;
+      padding: 20px 24px 32px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+    }
+
+    .card-header {
+      padding: 14px 20px 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #fefce8;
+      border: 1px solid #facc15;
+      font-size: 12px;
+      color: #713f12;
+      white-space: nowrap;
+    }
+
+    .date-pill span:first-child {
+      font-size: 14px;
+    }
+
+    .card-body {
+      padding: 16px 20px 20px;
+    }
+
+    /* Summary row */
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .summary-item {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px dashed var(--border);
+    }
+
+    .summary-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .summary-unit {
+      font-size: 11px;
+      color: #6b7280;
+      margin-right: 3px;
+    }
+
+    .summary-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* وسط الصفحة: مربع أفضل قناة + الرسم البياني */
+    .middle-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 2fr);
+      gap: 16px;
+      margin-bottom: 18px;
+      align-items: stretch;
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      border-radius: 12px;
+      border: 1px solid #facc15;
+      background: #fefce8;
+      padding: 10px 12px;
+      font-size: 12px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .highlight-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .highlight-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: #166534;
+      font-size: 11px;
+      margin-top: 10px;
+      align-self: flex-start;
+    }
+
+    /* Chart section */
+    .chart-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chart-header {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .chart-title-small {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .chart-subtitle-small {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .chart-wrapper {
+      margin-top: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 40px;
+      height: 180px;
+      padding: 10px 20px 8px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px dashed #e5e7eb;
+    }
+
+    .chart-bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .chart-bar {
+      width: 38px;
+      border-radius: 999px 999px 4px 4px;
+    }
+
+    .chart-bar.snap {
+      background: linear-gradient(to top, #eab308, #facc15);
+    }
+
+    .chart-bar.google {
+      background: linear-gradient(to top, #1d4ed8, #3b82f6);
+    }
+
+    .chart-bar-label {
+      font-size: 11px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .chart-bar-label span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 10px;
+      margin-top: 2px;
+    }
+
+    /* Campaign cards */
+    .campaign-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .campaign-card {
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      padding: 12px 14px 12px;
+    }
+
+    .campaign-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .campaign-name {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .platform-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .platform-tag.snap {
+      background: var(--primary);
+      color: #111827;
+    }
+
+    .platform-tag.google {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    .platform-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .campaign-dates {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .campaign-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .metric-box {
+      border-radius: 10px;
+      border: 1px dashed #e5e7eb;
+      background: #f9fafb;
+      padding: 6px 8px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .metric-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .metric-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .roas-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: #166534;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+    .roas-badge.badge-strong {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    @media (max-width: 1024px) {
+      .summary-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .campaign-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+      .middle-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-left">
+      <div class="brand-logo">D</div>
+      <div class="nav-text-block">
+        <div class="brand-text-main">لوحة دوح للإعلانات</div>
+        <div class="brand-text-sub">إدارة وتحليل أداء حملاتك الإعلانية</div>
+      </div>
+      <div class="nav-links">
+        <div class="nav-link">الحملات</div>
+        <div class="nav-link">الأدوات</div>
+        <div class="nav-link active">لوحة المعلومات</div>
+        <div class="nav-link">التقارير</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-icon-circle">📊</div>
+      <div class="profile-circle">A</div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="main">
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">ملخص الأداء للفترة المحددة</div>
+          <div class="card-subtitle">أرقام الحملات للمبيعات عبر المتجر الإلكتروني خلال شهر نوفمبر 2025</div>
+        </div>
+        <div class="date-pill">
+          <span>📆</span>
+          <span>1 Nov 2025 – 26 Nov 2025</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <!-- Summary -->
+        <div class="summary-row">
+          <div class="summary-item">
+            <div class="summary-label">إجمالي الميزانية الإعلانية</div>
+            <div class="summary-value">
+              <span class="summary-unit">SAR</span>268,652.63
+            </div>
+            <div class="summary-note">سناب شات + قوقل</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">إجمالي عدد الطلبات (Purchases)</div>
+            <div class="summary-value">11,574</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">إجمالي المبيعات من الحملات</div>
+            <div class="summary-value">
+              <span class="summary-unit">SAR</span>1,099,148
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">متوسط تكلفة اكتساب العميل (CAC)</div>
+            <div class="summary-value">
+              <span class="summary-unit">SAR</span>23.21
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle: highlight + chart side by side -->
+        <div class="middle-grid">
+          <!-- Highlight -->
+          <div class="highlight-box">
+            <div>
+              <div class="highlight-title">أفضل قناة من حيث العائد على الإنفاق</div>
+              <div>
+                حملة <strong>حملة الأداء الأفضل – Google Ads</strong> حققت أعلى ROAS
+                مقارنة بسناب شات، مع <strong>تكلفة اكتساب عميل 11.503 SAR</strong>
+                فقط، ومبيعات <strong>561,932 SAR</strong>.
+              </div>
+            </div>
+            <div class="highlight-pill">
+              <span>📈 ROAS Google</span>
+              <strong>8.17x</strong>
+              <span>مقابل 2.69x على Snapchat</span>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="chart-section">
+            <div class="chart-header">
+              <div class="chart-title-small">مقارنة ROAS بين القنوات</div>
+              <div class="chart-subtitle-small">
+                ارتفاع العمود يوضح العائد على الإنفاق الإعلاني لكل قناة خلال نفس الفترة
+              </div>
+            </div>
+
+            <div class="chart-wrapper">
+              <div class="chart-bar-group">
+                <div class="chart-bar snap" style="height:70px;"></div>
+                <div class="chart-bar-label">
+                  Snapchat
+                  <span>ROAS 2.69x</span>
+                </div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar google" style="height:160px;"></div>
+                <div class="chart-bar-label">
+                  Google Ads
+                  <span>ROAS 8.17x</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campaign cards -->
+        <div class="campaign-grid">
+          <!-- Snapchat Ads card -->
+          <div class="campaign-card">
+            <div class="campaign-header">
+              <div class="campaign-name">
+                حملة المبيعات – إعادة استهداف
+                <span class="platform-tag snap">
+                  <span class="platform-dot"></span>
+                  Snapchat Ads
+                </span>
+              </div>
+              <div class="campaign-dates">1 Nov – 26 Nov 2025</div>
+            </div>
+
+            <div class="campaign-metrics">
+              <div class="metric-box">
+                <div class="metric-label">الميزانية</div>
+                <div class="metric-value">199,885.64 SAR</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">عدد الطلبات (Purchase)</div>
+                <div class="metric-value">5,596</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">إجمالي المبيعات</div>
+                <div class="metric-value">537,216 SAR</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">CAC – تكلفة اكتساب العميل</div>
+                <div class="metric-value">35.719 SAR</div>
+              </div>
+            </div>
+
+            <div class="roas-badge">
+              <span>ROAS Snapchat</span>
+              <strong>2.69x</strong>
+              <span class="metric-sub">العائد لكل 1 SAR إنفاق</span>
+            </div>
+          </div>
+
+          <!-- Google Ads card -->
+          <div class="campaign-card">
+            <div class="campaign-header">
+              <div class="campaign-name">
+                حملة الأداء الأفضل
+                <span class="platform-tag google">
+                  <span class="platform-dot" style="background: var(--google-blue);"></span>
+                  Google Ads
+                </span>
+              </div>
+              <div class="campaign-dates">1 Nov – 26 Nov 2025</div>
+            </div>
+
+            <div class="campaign-metrics">
+              <div class="metric-box">
+                <div class="metric-label">الميزانية</div>
+                <div class="metric-value">68,766.99 SAR</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">عدد الطلبات (Purchase)</div>
+                <div class="metric-value">5,978</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">إجمالي المبيعات</div>
+                <div class="metric-value">561,932 SAR</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">CAC – تكلفة اكتساب العميل</div>
+                <div class="metric-value">11.503 SAR</div>
+              </div>
+            </div>
+
+            <div class="roas-badge badge-strong">
+              <span>ROAS Google</span>
+              <strong>8.17x</strong>
+              <span class="metric-sub">عائد أعلى بتكلفة اكتساب أقل</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>
